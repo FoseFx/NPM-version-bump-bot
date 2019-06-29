@@ -2,6 +2,30 @@
 
 > A GitHub App built with [Probot](https://github.com/probot/probot) that A Bot that bumps your app&#x27;s version on every push to a branch
 
+This is not tested at all.
+
+## Config
+In your `.github/config.yml` you can add:
+```
+version-bump-bot:
+  branch:
+    - master:
+      bump: "patch"
+    - release:
+      bump: "minor"
+    - "stable"
+      bump: "major"
+```
+Default config is:
+```
+version-bump-bot:
+  branch:
+    - master:
+      bump: "patch"
+```
+Every branch not mentioned in this list will not be touched.
+
+
 ## Setup
 
 ```sh

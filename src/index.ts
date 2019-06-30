@@ -1,7 +1,6 @@
 import { Application, Context } from 'probot' // eslint-disable-line no-unused-vars
 
 const NAME = "version-bump-bot[bot]";
-const PATH = "package.json";
 
 export = (app: Application) => {
   app.on('push', async (context: Context) => {
@@ -12,9 +11,11 @@ export = (app: Application) => {
 
     const config = await context.config('config.yml', {
       "version-bump-bot": {
+        path: "package.json",
         branch: [{"master": null, "bump": "patch"}]
       }
     });
+    const PATH = config.path;
     
     const branch = context.payload.ref.split("/")[2];
     let bump = "none";

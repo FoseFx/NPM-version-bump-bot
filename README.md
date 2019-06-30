@@ -8,6 +8,7 @@ This is not tested at all.
 In your `.github/config.yml` you can add:
 ```
 version-bump-bot:
+  path: "path/to/package.json"
   branch:
     - master:
       bump: "patch"
@@ -19,6 +20,7 @@ version-bump-bot:
 Default config is:
 ```
 version-bump-bot:
+  path: "package.json"  
   branch:
     - master:
       bump: "patch"

@@ -1,7 +1,7 @@
 {
   "name": "version-bump-bot",
   "version": "1.0.0",
-  "description": "A Bot that bumps your app's version on every push to a branch",
+  "description": "A Bot that bumps your apps version on every push to a branch",
   "author": "FoseFx <fosefx@pm.me>",
   "license": "ISC",
   "repository": "https://github.com//version-bump-bot.git",

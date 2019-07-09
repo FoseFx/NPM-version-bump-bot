@@ -3,7 +3,6 @@ import { Context } from 'probot'
 export function shouldCare (context: Context): boolean {
   const { payload } = context
   const message: string = payload.head_commit.message
-  console.log(message)
   return /^.*Bumped Version to.*$/.test(message)
 }
 

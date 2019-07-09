@@ -17,7 +17,6 @@ export = (app: Application) => {
         bump = obj.bump
       }
     })
-    console.log('after foreach')
 
     if (bump === 'none' || (bump !== 'major' && bump !== 'minor' && bump !== 'patch')) {
       return

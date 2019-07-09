@@ -5,6 +5,7 @@ const NAME = "version-bump-bot[bot]";
 export = (app: Application) => {
   app.on('push', async (context: Context) => {
 
+    console.log('payload', context.payload);
     if (context.payload.pusher.name === NAME) {
       return;
     };
@@ -15,7 +16,7 @@ export = (app: Application) => {
         branch: [{"master": null, "bump": "patch"}]
       }
     });
-    const PATH = config.path;
+    const PATH = config['version-bump-bot'].path;
     
     const branch = context.payload.ref.split("/")[2];
     let bump = "none";
@@ -29,7 +30,12 @@ export = (app: Application) => {
     if (bump === "none" || (bump !== "major" && bump !== "minor" && bump !== "patch")) {
       return;
     }
-
+    console.log({
+      owner: context.repo().owner,
+      repo: context.repo().repo,
+      path: PATH,
+      ref: context.payload.ref
+    });
     const file_data = await context.github.repos.getContents({
       owner: context.repo().owner,
       repo: context.repo().repo,

@@ -1,4 +1,5 @@
 .env
 *.private-key.pem
+private-key.pem
 node_modules
 lib

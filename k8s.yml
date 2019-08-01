@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: version-bump-bot
+  labels:
+    app: version-bump-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: version-bump-bot
+  template:
+    metadata:
+      labels:
+        app: version-bump-bot
+    spec:
+      volumes:
+      - name: vbb-pem-vol
+        secret: 
+          secretName: version-bump-bot-pem
+      containers:
+      - name: version-bump-bot
+        imagePullPolicy: Always
+        image: fosefx/version-bump-bot:8
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - mountPath: /secrets
+          name: vbb-pem-vol
+        envFrom:
+        - configMapRef:
+            name: version-bump-bot-env
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: version-bump-bot-service
+spec:
+  selector:
+    app: version-bump-bot
+  ports:
+  - protocol: TCP
+    targetPort: 3000
+    port: 3000
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: vbb-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: vbb.fosefx.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: version-bump-bot-service
+          servicePort: 3000

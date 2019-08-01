@@ -18,7 +18,7 @@ version-bump-bot:
 Default config is:
 ```
 version-bump-bot:
-  path: "package.json"  
+  path: "package.json"
   branch:
     - master:
       bump: "patch"
@@ -26,17 +26,34 @@ version-bump-bot:
 Every branch not mentioned in this list will not be touched.
 
 
-## Setup
+## Deploy
+
+### Using Docker
 
 0. Clone the Repo
 1. Create a [new Github App](https://github.com/settings/apps/new) enter gibberish for the WebhookURL and replace them later
 2. Create and Download a new Private Key for the App in the App's settings
-3. Download it and save it as `private-key.pem` in the root of the project
-4. Build a new Docker Image using `docker build --build-arg APP_ID=YOUR_APPS_APP_ID --build-arg WEBHOOK_SECRET=YOUR_APPS_WEBHOOK_SECRET -t my-version-bump-bot .` and replace the templates
-5. Deploy the Image, DO NOT PUBLISH THE IMAGE, IT CONTAINS SECRETS
-6. Replace the URL in the Github App's settings
-7. Install the App to one or more Repos
-8. Profit
+3. Download it and save it as `private-key.pem` in a `secrets` folder in this project (run `mkdir secrets` first)
+4. run `cp .env.example ./secrets/.env` and edit the .env file accordingly
+5. Build a new Docker Image using `docker build -t my-version-bump-bot .`
+6. run the image on your server using `docker run --env-file ./secrets/.env -v ./private-key.pem:private-key.pem:ro -d -p 3000:3000 my-version-bump-bot`
+7. Replace the URL in the Github App's settings
+8. Install the App to one or more Repos
+9. Profit
+
+### Using Kubernetes
+
+0. Clone the Repo
+1. Create a [new Github App](https://github.com/settings/apps/new) enter gibberish for the WebhookURL and replace them later
+2. Create and Download a new Private Key for the App in the App's settings
+3. Download it and save it as `private-key.pem` in a `secrets` folder in this project (run `mkdir secrets` first)
+4. run `cp .env.example ./secrets/.env` and edit the .env file accordingly
+5. Build a new Docker Image using `docker build -t my-version-bump-bot .`
+6. Push your image and replace `fosefx/version-bump-bot` in `k8s.yml`
+7. Make further changes in `k8s.yml`
+8. run `kubectl create secret generic version-bump-bot-pem --from-file=secrets/private-key.pem`
+9. run `kubectl create configmap version-bump-bot-env --from-env-file=secrets/.env`
+10. run `kubectl apply -f k8s.yml`
 
 ## Contributing
 
